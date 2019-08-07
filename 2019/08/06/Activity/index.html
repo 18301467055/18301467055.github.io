@@ -80,7 +80,10 @@
 <p>需要注意的是，onSaveInstanceState()方法并不是一定会被调用的，因为有些场景是不需要保存状态数据的。比如用户按下BACK键退出activity时，用户显然想要关闭这个activity，此时是没有必要保存数据以供下次恢复的，也就是onSaveInstanceState()方法不会被调用。如果调用onSaveInstanceState()方法，调用将发生在onPause()或onStop()方法之前。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$   @Override</span><br><span class="line">$   protected void onSaveInstanceState(Bundle outState)&#123;</span><br><span class="line">$       //TODO Auto-generated method stub</span><br><span class="line">$       super.onSaveInstanceState(outState);</span><br><span class="line">$   &#125;</span><br></pre></td></tr></table></figure>
 
-
+<h3 id="5、两个-Activity-之间跳转时必然会执行的方法"><a href="#5、两个-Activity-之间跳转时必然会执行的方法" class="headerlink" title="5、两个 Activity 之间跳转时必然会执行的方法"></a>5、两个 Activity 之间跳转时必然会执行的方法</h3><p>一般情况下比如说有两个activity，分别叫A、B，当在A里面激活B组件的时候，A会调用<br>onPause()方法，然后B调用onCreate()、onStart()、onResume()</p>
+<p>这个时候B覆盖了窗体，A会调用onStop()方法。如果B是个透明的，或者是对话框的样<br>式， 就不会调用A的onStop()方法</p>
+<p>如下，打开一个 MainActivity，然后点击MainActivity中的按钮跳转到<br>SecondActivity的日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$   MainActivity onCreate</span><br><span class="line">$   MainActivity onStart</span><br><span class="line">$   MainActivity onResume</span><br><span class="line">$   MainActivity onPause</span><br><span class="line">$   SecondActivity onCreate</span><br><span class="line">$   SecondActivity onStart</span><br><span class="line">$   SecondActivity onResume</span><br><span class="line">$   MainActivity onStop</span><br></pre></td></tr></table></figure>
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
                 <source type="audio/mpeg" src="">
