@@ -57,33 +57,67 @@
         <div class="stuff">
             <span>八月 06, 2019</span>
             
-  <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Shadow-Java的多线程/">Shadow Java的多线程</a></li></ul>
+  <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Shadow-付萌宸/">Shadow 付萌宸</a></li></ul>
 
 
         </div>
         <div class="content markdown">
-            <h2 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h2><h3 id="1、什么是Activity"><a href="#1、什么是Activity" class="headerlink" title="1、什么是Activity?"></a>1、什么是Activity?</h3><p>四大组件之一，通常一个用户交互界面对应一个activity。activity是Context的子类，同时实现了window.callback和keyevent.callback，可以处理与窗体用户交互的事件</p>
+            <h2 id="Activity"><a href="#Activity" class="headerlink" title="Activity"></a>Activity</h2><h3 id="1、什么是Activity"><a href="#1、什么是Activity" class="headerlink" title="1、什么是Activity?"></a>1、什么是Activity?</h3><p>四大组件之一，通常一个用户交互界面对应一个activity。activity是Context的子类，同时实现了<br>window.callback和keyevent.callback，可以处理与窗体用户交互的事件</p>
 <p>常见的Activity类型有FragmentActivity，ListActivity，TabActivity等</p>
 <p>如果界面有共同的特点或者功能的时候，还会自己定义一个BaseActivity</p>
-<h3 id="2、Activity的生命周期"><a href="#2、Activity的生命周期" class="headerlink" title="2、Activity的生命周期"></a>2、Activity的生命周期</h3><p>Activity从创建到销毁有多种状态，从一种状态到另一种状态时会激发相应的回调方法，这些回调方法包括：onCreate onStart onResume onPause onStop onDestory</p>
+<h3 id="2、Activity的生命周期"><a href="#2、Activity的生命周期" class="headerlink" title="2、Activity的生命周期"></a>2、Activity的生命周期</h3><p>Activity从创建到销毁有多种状态，从一种状态到另一种状态时会激发相应的回调方法，这些回调方法包<br>括：onCreate onStart onResume onPause onStop onDestory</p>
 <p>其实这些方法都是两两对应的，onCreate创建onDestroy销毁</p>
 <p>onStart可见与onStop不可见，onResume可编辑（即焦点）与onPause</p>
-<p>这6个方法是相对应的，那么就只剩下一个onRestart，这个方法的调用是在Activity被onStop后，但是没有被onDestory，在再次启动此Activity时就调用onRestart（而不再调用onCreate）方法</p>
+<p>这6个方法是相对应的，那么就只剩下一个onRestart，这个方法的调用是在Activity被onStop后，但是<br>没有被onDestory，在再次启动此Activity时就调用onRestart（而不再调用onCreate）方法</p>
 <p>如果被onDestory了，则是调用onCreate方法</p>
 <h3 id="3、Activity的状态"><a href="#3、Activity的状态" class="headerlink" title="3、Activity的状态"></a>3、Activity的状态</h3><p>a) foreground activity</p>
 <p>b) visible activity</p>
 <p>c) background activity</p>
 <p>d) empty process</p>
-<h3 id="4、如何保存Activity的状态"><a href="#4、如何保存Activity的状态" class="headerlink" title="4、如何保存Activity的状态"></a>4、如何保存Activity的状态</h3><p>Activity的状态通常情况下系统会自动保存的，只有当我们需要保存额外的数据时才需要使用到这样的功能</p>
-<p>一般来说，调用onPause()和onStop()方法后的activity实例仍然存在于内存中，activity的所有信息和状态数据不会消失，当activity重新回到前台之后，所有的改变都会得到保留</p>
-<p>但是当系统内存不足时，调用onPause()和onStop()方法后的activity可能会被系统摧毁，此时内存中就不会存有该activity的实例对象了。如果之后这个activity重新回到前台，之前所作的改变就会消失。为了避免此种情况的发生，我们可以覆写onSaveInstanceState()方法。onSaveInstanceState()方法接受一个Bundle类型的参数，开发者可以将状态数据存储到Bundle对象中，这样即使activity被系统摧毁，当用户重新启动这个activity而调用它的onCreate()方法时，上述的Bundle对象会作为实参传递给onCreate()方法，开发者可以从Bundle对象中取出保存的数据，然后利用这些数据将activity恢复到被摧毁之前的状态。</p>
-<p>需要注意的是，onSaveInstanceState()方法并不是一定会被调用的，因为有些场景是不需要保存状态数据的。比如用户按下BACK键退出activity时，用户显然想要关闭这个activity，此时是没有必要保存数据以供下次恢复的，也就是onSaveInstanceState()方法不会被调用。如果调用onSaveInstanceState()方法，调用将发生在onPause()或onStop()方法之前。</p>
+<h3 id="4、如何保存Activity的状态"><a href="#4、如何保存Activity的状态" class="headerlink" title="4、如何保存Activity的状态"></a>4、如何保存Activity的状态</h3><p>Activity的状态通常情况下系统会自动保存的，只有当我们需要保存额外的数据时才需要使用到这样的功<br>能</p>
+<p>一般来说，调用onPause()和onStop()方法后的activity实例仍然存在于内存中，activity的所有信息<br>和状态数据不会消失，当activity重新回到前台之后，所有的改变都会得到保留</p>
+<p>但是当系统内存不足时，调用onPause()和onStop()方法后的activity可能会被系统摧毁，此时内存中<br>就不会存有该activity的实例对象了。如果之后这个activity重新回到前台，之前所作的改变就会消<br>失。为了避免此种情况的发生，我们可以覆写onSaveInstanceState()方法。onSaveInstanceState()<br>方法接受一个Bundle类型的参数，开发者可以将状态数据存储到Bundle对象中，这样即使activity被系<br>统摧毁，当用户重新启动这个activity而调用它的onCreate()方法时，上述的Bundle对象会作为实参传<br>递给onCreate()方法，开发者可以从Bundle对象中取出保存的数据，然后利用这些数据将activity恢复<br>到被摧毁之前的状态。</p>
+<p>需要注意的是，onSaveInstanceState()方法并不是一定会被调用的，因为有些场景是不需要保存状态数<br>据的。比如用户按下BACK键退出activity时，用户显然想要关闭这个activity，此时是没有必要保存数<br>据以供下次恢复的，也就是onSaveInstanceState()方法不会被调用。如果调用onSaveInstanceState<br>()方法，调用将发生在onPause()或onStop()方法之前。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">protected void onSaveInstanceState(Bundle outState)&#123;</span><br><span class="line">    //TODO Auto-generated method stub</span><br><span class="line">    super.onSaveInstanceState(outState);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="5、两个-Activity-之间跳转时必然会执行的方法"><a href="#5、两个-Activity-之间跳转时必然会执行的方法" class="headerlink" title="5、两个 Activity 之间跳转时必然会执行的方法"></a>5、两个 Activity 之间跳转时必然会执行的方法</h3><p>一般情况下比如说有两个activity，分别叫A、B，当在A里面激活B组件的时候，A会调用<br>onPause()方法，然后B调用onCreate()、onStart()、onResume()</p>
 <p>这个时候B覆盖了窗体，A会调用onStop()方法。如果B是个透明的，或者是对话框的样<br>式， 就不会调用A的onStop()方法</p>
 <p>如下，打开一个 MainActivity，然后点击MainActivity中的按钮跳转到<br>SecondActivity的日志</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MainActivity onCreate</span><br><span class="line">MainActivity onStart</span><br><span class="line">MainActivity onResume</span><br><span class="line">MainActivity onPause</span><br><span class="line">SecondActivity onCreate</span><br><span class="line">SecondActivity onStart</span><br><span class="line">SecondActivity onResume</span><br><span class="line">MainActivity onStop</span><br></pre></td></tr></table></figure>
+
+<p>###6、横竖屏切换时 Activity 的生命周期</p>
+<p>此时的生命周期跟清单文件里的配置有关系。 </p>
+<p>1、不设置 Activity 的 android:configChanges 时，切屏会重新调用各个生命周期 默认首先销毁前<br>activity，然后重新加载。</p>
+<p>如下，当横竖屏切换时先执行 onPause/onStop 方法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SecondActivity onPause</span><br><span class="line">SecondActivity onStop</span><br><span class="line">SecondActivity onCreate</span><br><span class="line">SecondActivity onStart</span><br><span class="line">SecondActivity onResume</span><br></pre></td></tr></table></figure>
+
+<p>2、设置 Activity 的 android:configChanges=”orientation|keyboardHidden|screenSize”时，<br>切屏不会重新调 用各个生命周期，只会执行 onConfigurationChanged 方法。 </p>
+<p>通常在游戏开发, 屏幕的朝向都是写死的。</p>
+<p>###7、将一个 Activity 设置成窗口的样式</p>
+<p>只需要给我们的 Activity 配置如下属性即可 </p>
+<p>android:theme=”@android:style/Theme.Dialog”</p>
+<p>###8、退出 Activity 如何安全退出已调用多个 Activity 的 Application</p>
+<p>1、通常情况用户退出一个 Activity 只需按返回键，我们写代码想退出 activity 直接调用 finish()<br>方法就行。 </p>
+<p>2、记录打开的 Activity： </p>
+<p>每打开一个 Activity，就记录下来。在需要退出时，关闭每一个 Activity 即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//伪代码 </span><br><span class="line">List&lt;Activity&gt; lists ;</span><br><span class="line">// 在 application 全局的变量里面 </span><br><span class="line">lists = new ArrayList&lt;Activity&gt;(); </span><br><span class="line">lists.add(this); </span><br><span class="line"><span class="keyword">for</span>(Activity activity: lists) </span><br><span class="line">&#123; </span><br><span class="line">   activity.finish(); </span><br><span class="line">&#125;</span><br><span class="line">lists.remove(this);</span><br></pre></td></tr></table></figure>
+
+<p>3、发送特定广播：<br>在需要结束应用时，发送一个特定的广播，每个 Activity 收到广播后，关闭即可。 </p>
+<p>//给某个 activity 注册接受接受广播的意图 </p>
+<p>registerReceiver(receiver, filter) </p>
+<p>//如果过接受到的是 关闭 activity 的广播 就调用 finish()方法 把当前的 activity finish()掉 </p>
+<p>4、递归退出 </p>
+<p>在打开新的 Activity 时使用 startActivityForResult，然后自己加标志，在 onActivityResult<br>中处理，递归关闭。 </p>
+<p>5、其实 也可以通过 intent 的 flag 来实现 intent.setFlag(Intent.FLAG_ACTIVITY_CLEAR_TOP)<br>激活 一个新的 activity。此时如果该任务栈中已经有该 Activity，那么系统会把这个 Activity 上<br>面的所有 Activity 干掉。其 实相当于给 Activity 配置的启动模式为 SingleTop。</p>
+<p>###9、 Activity 的启动模式</p>
+<p>启动模式（launchMode）在多个 Activity 跳转的过程中扮演着重要的角色，它可以决定是否生成新的<br>Activity 实例， 是否重用已存在的 Activity 实例，是否和其他 Activity 实例公用一个 task<br>里。这里简单介绍一下 task 的概念，task 是 一个具有栈结构的对象，一个 task 可以管理多个<br>Activity，启动一个应用，也就创建一个与之对应的 task。 </p>
+<p>Activity 一共有以下四种 launchMode：</p>
+<p>1.standard </p>
+<p>2.singleTop </p>
+<p>3.singleTask </p>
+<p>4.singleInstance</p>
+<p>我们可以在 AndroidManifest.xml 配置<activity>的 android:launchMode 属性为以上四种之一即<br>可。</activity></p>
+
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
                 <source type="audio/mpeg" src="">
