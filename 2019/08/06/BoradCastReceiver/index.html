@@ -10,9 +10,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate">
     <meta name="keywords" content="Fechin,"> 
-    <meta name="description" content="##BoradCastReceiver
-###1、什么是BoradCastReceiver
-BroadCastReceiver 是 Android 四大组件之一，主要用于接收系统或者 app 发送的,"> 
+    <meta name="description" content="BoradCastReceiver1、什么是BoradCastReceiverBroadCastReceiver 是 Android 四大组件之一，主要用于接收系统或者 app 发送的广播事件。
+广,"> 
     <meta name="author" content="John Doe"> 
     <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -64,30 +63,25 @@ BroadCastReceiver 是 Android 四大组件之一，主要用于接收系统或�
 
         </div>
         <div class="content markdown">
-            <p>##BoradCastReceiver</p>
-<p>###1、什么是BoradCastReceiver</p>
-<p>BroadCastReceiver 是 Android 四大组件之一，主要用于接收系统或者 app 发送的广播事件。</p>
+            <h2 id="BoradCastReceiver"><a href="#BoradCastReceiver" class="headerlink" title="BoradCastReceiver"></a>BoradCastReceiver</h2><h3 id="1、什么是BoradCastReceiver"><a href="#1、什么是BoradCastReceiver" class="headerlink" title="1、什么是BoradCastReceiver"></a>1、什么是BoradCastReceiver</h3><p>BroadCastReceiver 是 Android 四大组件之一，主要用于接收系统或者 app 发送的广播事件。</p>
 <p>广播分两种：有序广播和无序广播。 </p>
 <p>内部通信实现机制：通过 Android 系统的 Binder 机制实现通信。 </p>
 <p>无序广播：完全异步，逻辑上可以被任何广播接收者接收到。优点是效率较高。缺点是一个接收者不能将<br>处理结 果传递给下一个接收者，并无法终止广播 intent 的传播。 </p>
 <p>有序广播：按照被接收者的优先级顺序，在被接收者中依次传播。比如有三个广播接收者 A，B，C，优先<br>级是 A &gt; B &gt; C。那这个消息先传给 A，再传给 B，最后传给 C。每个接收者有权终止广播，比如 B 终<br>止广播，C 就无法接收到。 此外 A 接收到广播后可以对结果对象进行操作，当广播传给 B 时，B 可以<br>从结果对象中取得 A 存入的数据。 </p>
 <p>在通过 Context.sendOrderedBroadcast(intent, receiverPermission, resultReceiver,<br>scheduler, initialCode, initialData, initialExtras)时我们可以指定 resultReceiver 广播<br>接收者，这个接收者我们可以认为是最终接收者，通常情况下如果比他优先级更高的接收者如果没有终止<br>广播，那么他的 onReceive 会被执行两次，第一次是正常的按照优 先级顺序执行，第二次是作为最终接<br>收者接收。如果比他优先级高的接收者终止了广播，那么他依然能接收到广播。</p>
 <p>在我们的项目中经常使用广播接收者接收系统通知，比如开机启动、sd 挂载、低电量、外播电话、锁屏<br>等。 如果我们做的是播放器，那么监听到用户锁屏后我们应该将我们的播放之暂停等。</p>
-<p>###2、在 manifest 和代码中注册和使用 BroadcastReceiver</p>
-<p>在清单文件中注册广播接收者称为静态注册，在代码中注册称为动态注册。静态注册的广播接收者只要<br>app 在系 统中运行则一直可以接收到广播消息，动态注册的广播接收者当注册的 Activity 或者<br>Service 销毁了那么就接收不到 广播了。</p>
+<h3 id="2、在-manifest-和代码中注册和使用-BroadcastReceiver"><a href="#2、在-manifest-和代码中注册和使用-BroadcastReceiver" class="headerlink" title="2、在 manifest 和代码中注册和使用 BroadcastReceiver"></a>2、在 manifest 和代码中注册和使用 BroadcastReceiver</h3><p>在清单文件中注册广播接收者称为静态注册，在代码中注册称为动态注册。静态注册的广播接收者只要<br>app 在系 统中运行则一直可以接收到广播消息，动态注册的广播接收者当注册的 Activity 或者<br>Service 销毁了那么就接收不到 广播了。</p>
 <p>静态注册：在清单文件中进行如下配置</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;receiver android:name=<span class="string">".BroadcastReceiver1"</span> &gt;</span><br><span class="line">    &lt;intent-filter&gt; </span><br><span class="line">        &lt;action android:name=<span class="string">"android.intent.action.CALL"</span> &gt; </span><br><span class="line">        &lt;/action&gt; </span><br><span class="line">    &lt;/intent-filter&gt; </span><br><span class="line">&lt;/receiver&gt;</span><br></pre></td></tr></table></figure>
 
 <p>动态注册：在代码中进行如下注册</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">receiver = new BroadcastReceiver(); </span><br><span class="line">IntentFilter intentFilter = new IntentFilter(); </span><br><span class="line">intentFilter.addAction(CALL_ACTION); </span><br><span class="line">context.registerReceiver(receiver, intentFilter);</span><br></pre></td></tr></table></figure>
 
-<p>###3、BroadCastReceiver 的生命周期</p>
-<p>a. 广播接收者的生命周期非常短暂的，在接收到广播的时候创建，onReceive()方法结束之后销毁；</p>
+<h3 id="3、BroadCastReceiver-的生命周期"><a href="#3、BroadCastReceiver-的生命周期" class="headerlink" title="3、BroadCastReceiver 的生命周期"></a>3、BroadCastReceiver 的生命周期</h3><p>a. 广播接收者的生命周期非常短暂的，在接收到广播的时候创建，onReceive()方法结束之后销毁；</p>
 <p>b. 广播接收者中不要做一些耗时的工作，否则会弹出 Application No Response 错误对话框； </p>
 <p>c. 最好也不要在广播接收者中创建子线程做耗时的工作，因为广播接收者被销毁后进程就成为了空进程，<br>很容易被系统杀掉；</p>
 <p>d. 耗时的较长的工作最好放在服务中完成；</p>
-<p>###4、如何让自己的广播只让指定的 app 接收</p>
-<p>1、自己的应用（假设名称为应用 A）在发送广播的时候给自己发送的广播添加自定义权限，假设权限名<br>为：com.itheima.android.permission，然后需要在应用 A 的 AndroidManifest.xml 中声明如下权<br>限： </p>
+<h3 id="4、如何让自己的广播只让指定的-app-接收"><a href="#4、如何让自己的广播只让指定的-app-接收" class="headerlink" title="4、如何让自己的广播只让指定的 app 接收"></a>4、如何让自己的广播只让指定的 app 接收</h3><p>1、自己的应用（假设名称为应用 A）在发送广播的时候给自己发送的广播添加自定义权限，假设权限名<br>为：com.itheima.android.permission，然后需要在应用 A 的 AndroidManifest.xml 中声明如下权<br>限： </p>
 <p><permission android:name="com.itheima.android.permission" android:protectionlevel="normal"></permission><br><uses-permission android:name="com.itheima.android.permission"></uses-permission></p>
 <p>2、其他应用（假设名称诶应用 B）如果想接收该广播，那么就必须知道应用 A 广播使用的权限。然后在<br>应用 B 的清单文件中如下配置：</p>
 <uses-permission android:name="com.itheima.android.permission">
@@ -100,21 +94,15 @@ BroadCastReceiver 是 Android 四大组件之一，主要用于接收系统或�
 <p>signature：只有当申请权限的应用程序的数字签名与声明此权限的应用程序的数字签名相同时（如 果是<br>申请系统权限，则需要与系统签名相同），才能将权限授给它； </p>
 <p>signatureOrSystem：签名相同，或者申请权限的应用为系统应用（在 system image 中）。 </p>
 <p>上述四类权限级别同样可用于自定义权限中。如果开发者需要对自己的应用程序（或部分应用）进 行访问<br>控制，则可以通过在 AndroidManifest.xml 中添加<permission>标签，将其属性中的<br>protectionLevel 设置为上述四类级别中的某一种来实现。</permission></p>
-<p>###5、什么是最终广播接收者</p>
-<p>最终广播是我们自己应用发送有序广播时通过 ContextWrapper.sendOrderedBroadcast()方法指定的<br>当前应用 下的广播，该广播可能会被执行两次，第一次是作为普通广播按照优先级接收广播，第二次是作<br>为 final receiver 必须 接收一次。</p>
-<p>###6、广播的优先级是否对无序广播生效</p>
-<p>生效的。广播的优先级推荐的范围是：[-1000,+1000]，但是如果设置的优先级值超过这个范围也是可以<br>的。</p>
-<p>###7、动态注册的广播优先级谁高</p>
-<p>动态注册中，谁先注册谁优先级高。</p>
-<p>###8、如何判断当前BroadcastReceiver接收到的是有序广播还是无序广播</p>
-<p>在 BroadcastReceiver 类中 onReceive（）方法中，可以调用 boolean b = isOrderedBroadcast<br>（）;该方法是 BroadcastReceiver 类中提供的方法，用于告诉我们当前的接收到的广播是否为有序广<br>播。</p>
-<p>###9、Android 引入广播机制的用意</p>
-<p>a.从 MVC 的角度考虑(应用程序内) 其实回答这个问题的时候还可以这样问，android 为什么要有那 4<br>大组件， 现在的移动开发模型基本上也是照搬的 web 那一套 MVC 架构，只不过是改了点嫁妆而已。<br>android 的四大组件本质 上就是为了实现移动或者说嵌入式设备上的 MVC 架构，它们之间有时候是一种<br>相互依存的关系，有时候又是一种补 充关系，引入广播机制可以方便几大组件的信息和数据交互。</p>
+<h3 id="5、什么是最终广播接收者"><a href="#5、什么是最终广播接收者" class="headerlink" title="5、什么是最终广播接收者"></a>5、什么是最终广播接收者</h3><p>最终广播是我们自己应用发送有序广播时通过 ContextWrapper.sendOrderedBroadcast()方法指定的<br>当前应用 下的广播，该广播可能会被执行两次，第一次是作为普通广播按照优先级接收广播，第二次是作<br>为 final receiver 必须 接收一次。</p>
+<h3 id="6、广播的优先级是否对无序广播生效"><a href="#6、广播的优先级是否对无序广播生效" class="headerlink" title="6、广播的优先级是否对无序广播生效"></a>6、广播的优先级是否对无序广播生效</h3><p>生效的。广播的优先级推荐的范围是：[-1000,+1000]，但是如果设置的优先级值超过这个范围也是可以<br>的。</p>
+<h3 id="7、动态注册的广播优先级谁高"><a href="#7、动态注册的广播优先级谁高" class="headerlink" title="7、动态注册的广播优先级谁高"></a>7、动态注册的广播优先级谁高</h3><p>动态注册中，谁先注册谁优先级高。</p>
+<h3 id="8、如何判断当前BroadcastReceiver接收到的是有序广播还是无序广播"><a href="#8、如何判断当前BroadcastReceiver接收到的是有序广播还是无序广播" class="headerlink" title="8、如何判断当前BroadcastReceiver接收到的是有序广播还是无序广播"></a>8、如何判断当前BroadcastReceiver接收到的是有序广播还是无序广播</h3><p>在 BroadcastReceiver 类中 onReceive（）方法中，可以调用 boolean b = isOrderedBroadcast<br>（）;该方法是 BroadcastReceiver 类中提供的方法，用于告诉我们当前的接收到的广播是否为有序广<br>播。</p>
+<h3 id="9、Android-引入广播机制的用意"><a href="#9、Android-引入广播机制的用意" class="headerlink" title="9、Android 引入广播机制的用意"></a>9、Android 引入广播机制的用意</h3><p>a.从 MVC 的角度考虑(应用程序内) 其实回答这个问题的时候还可以这样问，android 为什么要有那 4<br>大组件， 现在的移动开发模型基本上也是照搬的 web 那一套 MVC 架构，只不过是改了点嫁妆而已。<br>android 的四大组件本质 上就是为了实现移动或者说嵌入式设备上的 MVC 架构，它们之间有时候是一种<br>相互依存的关系，有时候又是一种补 充关系，引入广播机制可以方便几大组件的信息和数据交互。</p>
 <p>b.程序间互通消息(例如在自己的应用程序内监听系统来电)</p>
 <p>c.效率上(参考 UDP 的广播协议在局域网的方便性)</p>
 <p>d.设计模式上(反转控制的一种应用，类似监听者模式)</p>
-<p>###10、网络状态改变是无序广播还是有序广播，安装了，没启动过，会接受这个广播么？</p>
-<p>无序广播。不会。android 在 3.0 之后，对广播增加了一个标记：<br>Intent.FLAG_EXCLUDE_STOPPED_PACKAGES， 这个是为了加强了对“停止”状态 APP 的管理（比如<br>app 安装后未启动或者被用户强制停止）。广播加上这个 Flag 之后，处于“停止”状态的 APP 是无法收<br>到广播的，系统发出的广播基本都有这个 Flag。因此该类广播我们在使用的 时候主要是采用动态注册的<br>方式。</p>
+<h3 id="10、网络状态改变是无序广播还是有序广播，安装了，没启动过，会接受这个广播么？"><a href="#10、网络状态改变是无序广播还是有序广播，安装了，没启动过，会接受这个广播么？" class="headerlink" title="10、网络状态改变是无序广播还是有序广播，安装了，没启动过，会接受这个广播么？"></a>10、网络状态改变是无序广播还是有序广播，安装了，没启动过，会接受这个广播么？</h3><p>无序广播。不会。android 在 3.0 之后，对广播增加了一个标记：<br>Intent.FLAG_EXCLUDE_STOPPED_PACKAGES， 这个是为了加强了对“停止”状态 APP 的管理（比如<br>app 安装后未启动或者被用户强制停止）。广播加上这个 Flag 之后，处于“停止”状态的 APP 是无法收<br>到广播的，系统发出的广播基本都有这个 Flag。因此该类广播我们在使用的 时候主要是采用动态注册的<br>方式。</p>
 </uses-permission>
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
