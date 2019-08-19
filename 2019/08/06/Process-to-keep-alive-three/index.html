@@ -73,7 +73,7 @@
 
 <p>我们发现oom_adj的值已经变为了6，所以退到后台的app在资源紧张的情况下就有可能被杀死了。</p>
 <p>关于oom_adj可参考:</p>
-<p><a href>Android 进程保活（一）写在前面</a></p>
+<p><a href="http://www.fumengchen.com/2019/08/06/Process-to-keep-alive-one/" target="_blank" rel="noopener">Android 进程保活（一）写在前面</a></p>
 <p>从而我们可通过提高oom_adj的值可以使我们的app被系统杀死的概率变低。</p>
 <p>我们使用的1像素保活方案就是应用了这点。</p>
 <p>创建一个1像素的Activity，如下：</p>
@@ -99,7 +99,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;service android:name=<span class="string">".OnePxService"</span></span><br><span class="line">            android:process=<span class="string">":onepx_service"</span>/&gt;</span><br></pre></td></tr></table></figure>
 
 <p>同时提高存活概率可以使用双进程守护方案来进一步加强，可参考：</p>
-<p><a href>Android 进程保活（二）双服务进程包活</a></p>
+<p><a href="http://www.fumengchen.com/2019/08/06/Process-to-keep-alive-two/" target="_blank" rel="noopener">Android 进程保活（二）双服务进程包活</a></p>
+<p>Android 进程保活系列：</p>
+<p><a href="http://www.fumengchen.com/2019/08/06/Process-to-keep-alive-one/" target="_blank" rel="noopener">Android 进程保活（一）写在前面</a><br><a href="http://www.fumengchen.com/2019/08/06/Process-to-keep-alive-two/" target="_blank" rel="noopener">Android 进程保活（二）双服务进程包活</a><br><a href="http://www.fumengchen.com/2019/08/06/Process-to-keep-alive-three/" target="_blank" rel="noopener">Adnroid 进程保活（三）1像素方案保活</a><br><a href="http://www.fumengchen.com/2019/08/06/Process-to-keep-alive-four/" target="_blank" rel="noopener">Android 进程保活（四）使用“前台服务”保活</a><br><a href="http://www.fumengchen.com/2019/08/06/Process-to-keep-alive-five/" target="_blank" rel="noopener">Android 进程保活（五）JobSheduler进程重生</a></p>
 
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
