@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang class="loading">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FFmpeg系列 三、音乐APP（添加Module并添加FFmpeg动态库） - Hexo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate">
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="基于之前的工程来添加Module工程。
+创建Module工程
+
+
+
+
+将新建的Module工程添加到APP工程中。
+
+
+Module添加C++支持
+将app gradle中的配置移植到module ,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <link rel="stylesheet" href="/css/diaspora.css">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+</head>
+</html>
+<body class="loading">
+    <span id="config-title" style="display:none">Hexo</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">FFmpeg系列 三、音乐APP（添加Module并添加FFmpeg动态库）</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">FFmpeg系列 三、音乐APP（添加Module并添加FFmpeg动态库）</h1>
+        <div class="stuff">
+            <span>十月 16, 2019</span>
+            
+  <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Shadow-付萌宸/">Shadow 付萌宸</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <p><strong>基于之前的工程来添加Module工程。</strong></p>
+<p><strong>创建Module工程</strong></p>
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-04-20-08-12.png">
+
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-04-20-09-07.png">
+
+<p>将新建的Module工程添加到APP工程中。</p>
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-08-25-30.png">
+
+<p><strong>Module添加C++支持</strong></p>
+<p>将app gradle中的配置移植到module gradle中</p>
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-08-29-46.png">
+
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-08-30-55.png">
+
+<p><strong>将app中的CMakeLists.txt移植到module中</strong></p>
+<p>注意我们要移植到module工程的根目录中，如：</p>
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-11-51-06.png">
+
+<p>module工程中创建类文件添加native方法</p>
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-08-39-00.png">
+
+<p>有报红的是因为我们移植过来的cpp文件jni 方法包名不对引起的。 修正为：</p>
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-08-41-55.png">
+
+<p><strong>修改app的MainActivity代码用于测试验证结果</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.music.app;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> *;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Example of a call to a native method</span></span><br><span class="line">        TextView tv = findViewById(R.id.sample_text);</span><br><span class="line">        tv.setText(<span class="keyword">new</span> Demo().stringFromJNI());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-08-49-29.png">
+
+<p>我们看到上面已经正常输出了c++的运算结果。</p>
+<p><strong>添加FFmpeg动态库</strong></p>
+<p>这里面提到的资源如果给位没有，请参考：</p>
+<p>FFmpeg系列 一、编译FFmpeg</p>
+<p><strong>module cpp文件夹中创建include文件夹，并添加ffmpeg中include中所有文件</strong></p>
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-11-43-29.png">
+
+<p><strong>module main文件夹中创建jniLibs,复制arm 和 x86的.so库到jinLibs中</strong></p>
+<p>创建jniLibs目录<br>将arm和x86动态库拷贝到jinLibs目录下。</p>
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-09-02-58.png">
+
+<p><strong>配置module gradle文件</strong></p>
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-11-41-31.png">
+
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-11-42-19.png">
+
+<p><strong>cmakelists.txt 配置FFmpeg</strong></p>
+<p><strong>导入include路径</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#导入头文件路径</span><br><span class="line">include_directories(src/main/cpp/include)</span><br></pre></td></tr></table></figure>
+
+<p><strong>添加动态库</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#导入动态库</span><br><span class="line">add_library(avcodec-<span class="number">57</span> SHARED IMPORTED)</span><br></pre></td></tr></table></figure>
+
+<p><strong>设置动态库路径</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#设置动态库路径</span><br><span class="line">set_target_properties(avcodec-<span class="number">57</span> PROPERTIES IMPORTED_LOCATION $&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libavcodec-<span class="number">57</span>.so)</span><br></pre></td></tr></table></figure>
+
+<p><strong>链接动态库</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">target_link_libraries( # Specifies the target library.</span><br><span class="line">                       <span class="keyword">native</span>-lib</span><br><span class="line"></span><br><span class="line">                       avcodec-<span class="number">57</span></span><br><span class="line"></span><br><span class="line">                       $&#123;log-lib&#125; )</span><br></pre></td></tr></table></figure>
+
+<p><strong>最终CMake</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION <span class="number">3.4</span>.1)</span><br><span class="line"></span><br><span class="line">#导入头文件路径</span><br><span class="line">include_directories(include)</span><br><span class="line"></span><br><span class="line">#导入动态库</span><br><span class="line">add_library(avcodec-<span class="number">57</span> SHARED IMPORTED)</span><br><span class="line"></span><br><span class="line">#设置动态库路径</span><br><span class="line">set_target_properties(avcodec-<span class="number">57</span> PROPERTIES IMPORTED_LOCATION $&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libavcodec-<span class="number">57</span>.so)</span><br><span class="line"></span><br><span class="line">#导入动态库</span><br><span class="line">add_library(avdevice-<span class="number">57</span> SHARED IMPORTED)</span><br><span class="line"></span><br><span class="line">#设置动态库路径</span><br><span class="line">set_target_properties(avdevice-<span class="number">57</span> PROPERTIES IMPORTED_LOCATION $&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libavdevice-<span class="number">57</span>.so)</span><br><span class="line"></span><br><span class="line">#导入动态库</span><br><span class="line">add_library(avfilter-<span class="number">6</span> SHARED IMPORTED)</span><br><span class="line"></span><br><span class="line">#设置动态库路径</span><br><span class="line">set_target_properties(avfilter-<span class="number">6</span> PROPERTIES IMPORTED_LOCATION $&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libavfilter-<span class="number">6</span>.so)</span><br><span class="line"></span><br><span class="line">#导入动态库</span><br><span class="line">add_library(avformat-<span class="number">57</span> SHARED IMPORTED)</span><br><span class="line"></span><br><span class="line">#设置动态库路径</span><br><span class="line">set_target_properties(avformat-<span class="number">57</span> PROPERTIES IMPORTED_LOCATION $&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libavformat-<span class="number">57</span>.so)</span><br><span class="line"></span><br><span class="line">#导入动态库</span><br><span class="line">add_library(avutil-<span class="number">55</span> SHARED IMPORTED)</span><br><span class="line"></span><br><span class="line">#设置动态库路径</span><br><span class="line">set_target_properties(avutil-<span class="number">55</span> PROPERTIES IMPORTED_LOCATION $&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libavutil-<span class="number">55</span>.so)</span><br><span class="line"></span><br><span class="line">#导入动态库</span><br><span class="line">add_library(postproc-<span class="number">54</span> SHARED IMPORTED)</span><br><span class="line"></span><br><span class="line">#设置动态库路径</span><br><span class="line">set_target_properties(postproc-<span class="number">54</span> PROPERTIES IMPORTED_LOCATION $&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libpostproc-<span class="number">54</span>.so)</span><br><span class="line"></span><br><span class="line">#导入动态库</span><br><span class="line">add_library(swresample-<span class="number">2</span> SHARED IMPORTED)</span><br><span class="line"></span><br><span class="line">#设置动态库路径</span><br><span class="line">set_target_properties(swresample-<span class="number">2</span> PROPERTIES IMPORTED_LOCATION $&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libswresample-<span class="number">2</span>.so)</span><br><span class="line"></span><br><span class="line">#导入动态库</span><br><span class="line">add_library(swscale-<span class="number">4</span> SHARED IMPORTED)</span><br><span class="line"></span><br><span class="line">#设置动态库路径</span><br><span class="line">set_target_properties(swscale-<span class="number">4</span> PROPERTIES IMPORTED_LOCATION $&#123;CMAKE_SOURCE_DIR&#125;/src/main/jniLibs/$&#123;ANDROID_ABI&#125;/libswscale-<span class="number">4</span>.so)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">add_library(<span class="keyword">native</span>-lib</span><br><span class="line">            SHARED</span><br><span class="line">            <span class="keyword">native</span>-lib.cpp)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">find_library(log-lib</span><br><span class="line">              log )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">target_link_libraries(<span class="keyword">native</span>-lib</span><br><span class="line">        $&#123;log-lib&#125;</span><br><span class="line"></span><br><span class="line">                       avcodec-<span class="number">57</span></span><br><span class="line">                        avdevice-<span class="number">57</span></span><br><span class="line">                        avfilter-<span class="number">6</span></span><br><span class="line">                        avformat-<span class="number">57</span></span><br><span class="line">                        avutil-<span class="number">55</span></span><br><span class="line">                        postproc-<span class="number">54</span></span><br><span class="line">                        swresample-<span class="number">2</span></span><br><span class="line">                        swscale-<span class="number">4</span></span><br><span class="line"></span><br><span class="line">                        )</span><br></pre></td></tr></table></figure>
+
+<p>注意：CMakeLists.txt文件需要放到项目跟目录，否则会出现路径不对引发的错误。</p>
+<p><strong>Demo验证FFmpeg是否集成成功</strong></p>
+<p>在module 工程 Demo中导入动态库并加入native方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.music.mplayer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Used to load the 'native-lib' library on application startup.</span></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">"native-lib"</span>);</span><br><span class="line"></span><br><span class="line">        System.loadLibrary(<span class="string">"avcodec-57"</span>);</span><br><span class="line">        System.loadLibrary(<span class="string">"avdevice-57"</span>);</span><br><span class="line">        System.loadLibrary(<span class="string">"avfilter-6"</span>);</span><br><span class="line">        System.loadLibrary(<span class="string">"avformat-57"</span>);</span><br><span class="line">        System.loadLibrary(<span class="string">"avutil-55"</span>);</span><br><span class="line">        System.loadLibrary(<span class="string">"postproc-54"</span>);</span><br><span class="line">        System.loadLibrary(<span class="string">"swresample-2"</span>);</span><br><span class="line">        System.loadLibrary(<span class="string">"swscale-4"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * A native method that is implemented by the 'native-lib' native library,</span></span><br><span class="line"><span class="comment">     * which is packaged with this application.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> String <span class="title">stringFromJNI</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">testFFmpeg</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>报红的部分 alt+enter 搞定。</p>
+<p>native-lib.cpp代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;jni.h&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">#include &lt;android/log.h&gt;</span><br><span class="line"></span><br><span class="line">extern <span class="string">"C"</span></span><br><span class="line">&#123;</span><br><span class="line">#include &lt;libavformat/avformat.h&gt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#define LOGI(FORMAT,...) __android_log_print(ANDROID_LOG_INFO,"zhangyue",FORMAT,##__VA_ARGS__);</span><br><span class="line"></span><br><span class="line">extern <span class="string">"C"</span></span><br><span class="line">JNIEXPORT jstring</span><br><span class="line">JNICALL</span><br><span class="line">Java_com_music_mplayer_Demo_stringFromJNI(</span><br><span class="line">        JNIEnv* env,</span><br><span class="line">        jobject <span class="comment">/* this */</span>) &#123;</span><br><span class="line"></span><br><span class="line">    std::string hello = <span class="string">"Welcome to"</span>;</span><br><span class="line">    <span class="keyword">return</span> env-&gt;NewStringUTF(hello.c_str());</span><br><span class="line">&#125;</span><br><span class="line">extern <span class="string">"C"</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL</span><br><span class="line">Java_com_music_mplayer_Demo_testFFmpeg(JNIEnv *env, jobject instance) &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// TODO</span></span><br><span class="line">    av_register_all();</span><br><span class="line">    AVCodec *c_temp = av_codec_next(NULL);</span><br><span class="line">    <span class="keyword">while</span> (c_temp != NULL)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">switch</span> (c_temp-&gt;type)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">case</span> AVMEDIA_TYPE_VIDEO:</span><br><span class="line">                LOGI(<span class="string">"[Video]:%s"</span>, c_temp-&gt;name);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> AVMEDIA_TYPE_AUDIO:</span><br><span class="line">                LOGI(<span class="string">"[Audio]:%s"</span>, c_temp-&gt;name);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                LOGI(<span class="string">"[Other]:%s"</span>, c_temp-&gt;name);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        c_temp = c_temp-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>MainActivity代码修改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.music.app;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> ****;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        <span class="keyword">new</span> Demo().testFFmpeg();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行程序后，logcat输出如下log：</p>
+<img src="http://www.zydeveloper.com/2019/09/05/ffmpeg-demo1-module/2019-09-05-11-48-24.png">
+
+<p>打印了ffmpeg支持的视频格式，说明我们已经集成成功了！</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        <li title='0' data-url='http://link.hhtjim.com/163/5146554.mp3'></li>
+                    
+                        <li title='1' data-url='http://link.hhtjim.com/qq/001faIUs4M2zna.mp3'></li>
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>

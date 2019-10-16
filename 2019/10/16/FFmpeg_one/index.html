@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang class="loading">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FFmpeg系列一、编译FFmpeg - Hexo</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate">
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="编译FFmpeg
+在Ubuntu中编译Android平台的FFmpeg（arm和x86）
+环境准备：
+-下载FFmpeg源码（v3.3.9）-下载NDK（r14b）-编写Android编译脚本
+下载,"> 
+    <meta name="author" content="John Doe"> 
+    <link rel="alternative" href="atom.xml" title="Hexo" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <link rel="stylesheet" href="/css/diaspora.css">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "ca-pub-8691406134231910",
+              enable_page_level_ads: true
+         });
+    </script>
+    <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    </script>
+</head>
+</html>
+<body class="loading">
+    <span id="config-title" style="display:none">Hexo</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="icon-home image-icon" href="javascript:;" data-url="http://yoursite.com"></a>
+    <div title="播放/暂停" class="icon-play"></div>
+    <h3 class="subtitle">FFmpeg系列一、编译FFmpeg</h3>
+    <div class="social">
+        <!--<div class="like-icon">-->
+            <!--<a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+        <!--</div>-->
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">FFmpeg系列一、编译FFmpeg</h1>
+        <div class="stuff">
+            <span>十月 16, 2019</span>
+            
+  <ul class="post-tags-list"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Shadow-付萌宸/">Shadow 付萌宸</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <p><strong>编译FFmpeg</strong></p>
+<p>在Ubuntu中编译Android平台的FFmpeg（arm和x86）</p>
+<p>环境准备：</p>
+<p>-下载FFmpeg源码（v3.3.9）<br>-下载NDK（r14b）<br>-编写Android编译脚本</p>
+<p><strong>下载FFmpeg源码（v3.3.9）</strong></p>
+<p><a href="http://www.ffmpeg.org/download.html#releases" target="_blank" rel="noopener">V3.3.9下载地址</a></p>
+<img src="http://www.zydeveloper.com/2019/09/04/ffmpeg-build/2019-09-04-09-26-57.png">
+
+<p><strong>下载NDK（r14b）</strong></p>
+<p><a href="https://developer.android.google.cn/ndk/downloads/older_releases.html" target="_blank" rel="noopener">NDK r14b 下载</a></p>
+<p>因为在Ubuntu下编译，便于我们方便连接操作，我这里使用XShell与XFTP工具。</p>
+<p><strong>使用FTP上传下载文件到Ubuntu中</strong></p>
+<img src="http://www.zydeveloper.com/2019/09/04/ffmpeg-build/2019-09-04-10-13-07.png">
+
+<p>解压文件<br>解压FFmpeg<br>tar -zxvf ffmpeg-3.3.9.tar.gz</p>
+<p>解压NDK<br>unzip android-ndk-r14b-linux-x86_64.zip</p>
+<p>修改脚本<br>修改FFmpeg的configure文件<br>因为android只能加载.so的动态库，不能识别如.so.57结尾的*</p>
+<p>将虚拟机中的configure文件使用FTP下载到本地进行如下修改：</p>
+<p>进行如图修改：</p>
+<img src="http://www.zydeveloper.com/2019/09/04/ffmpeg-build/2019-09-04-12-01-10.png">
+
+<p>修改内容如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#SLIBNAME_WITH_MAJOR='$(SLIBNAME).$(LIBMAJOR)'</span><br><span class="line">#LIB_INSTALL_EXTRA_CMD='$$(RANLIB) "$(LIBDIR)/$(LIBNAME)"'</span><br><span class="line">#SLIB_INSTALL_NAME='$(SLIBNAME_WITH_VERSION)'</span><br><span class="line">#SLIB_INSTALL_LINKS='$(SLIBNAME_WITH_MAJOR) $(SLIBNAME)'</span><br><span class="line">SLIBNAME_WITH_MAJOR=<span class="string">'$(SLIBPREF)$(FULLNAME)-$(LIBMAJOR)$(SLIBSUF)'</span></span><br><span class="line">LIB_INSTALL_EXTRA_CMD=<span class="string">'$$(RANLIB) "$(LIBDIR)/$(LIBNAME)"'</span></span><br><span class="line">SLIB_INSTALL_NAME=<span class="string">'$(SLIBNAME_WITH_MAJOR)'</span></span><br><span class="line">SLIB_INSTALL_LINKS=<span class="string">'$(SLIBNAME)'</span></span><br></pre></td></tr></table></figure>
+
+<p>修改后更新到Ubuntu中。</p>
+<p>设置configure权限并执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">chmod <span class="number">777</span> configure</span><br><span class="line"></span><br><span class="line">./configure</span><br></pre></td></tr></table></figure>
+
+<img src="http://www.zydeveloper.com/2019/09/04/ffmpeg-build/2019-09-04-14-31-36.png">
+
+<p><strong>编写Android编译脚本</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#!/bin/bash</span><br><span class="line">#NDK路径 此次要改成你真实环境ndk所在目录</span><br><span class="line">export NDK_HOME=/home<span class="comment">/**/ffmpeg/android-ndk-r14b  </span></span><br><span class="line"><span class="comment">#android 平台版本</span></span><br><span class="line"><span class="comment">export PLATFORM_VERSION=android-9</span></span><br><span class="line"><span class="comment">#定义build函数</span></span><br><span class="line"><span class="comment">function build</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">	#输出编译的哪个平台</span></span><br><span class="line"><span class="comment">	echo "start build ffmpeg for $ARCH"</span></span><br><span class="line"><span class="comment">	#传入参数——目标平台linux</span></span><br><span class="line"><span class="comment">	./configure --target-os=linux \</span></span><br><span class="line"><span class="comment">	#输出路径</span></span><br><span class="line"><span class="comment">	--prefix=$PREFIX --arch=$ARCH \</span></span><br><span class="line"><span class="comment">	#排除 doc</span></span><br><span class="line"><span class="comment">	--disable-doc \</span></span><br><span class="line"><span class="comment">	--enable-shared \</span></span><br><span class="line"><span class="comment">	#去掉静态库</span></span><br><span class="line"><span class="comment">	--disable-static \</span></span><br><span class="line"><span class="comment">	#去掉汇编</span></span><br><span class="line"><span class="comment">	--disable-yasm \</span></span><br><span class="line"><span class="comment">	--disable-asm \</span></span><br><span class="line"><span class="comment">	--disable-symver \</span></span><br><span class="line"><span class="comment">	--enable-gpl \</span></span><br><span class="line"><span class="comment">	#去掉。。。</span></span><br><span class="line"><span class="comment">	--disable-ffmpeg \</span></span><br><span class="line"><span class="comment">	--disable-ffplay \</span></span><br><span class="line"><span class="comment">	--disable-ffprobe \</span></span><br><span class="line"><span class="comment">	--disable-ffserver \</span></span><br><span class="line"><span class="comment">	#配置交叉编译环境</span></span><br><span class="line"><span class="comment">	--cross-prefix=$CROSS_COMPILE \</span></span><br><span class="line"><span class="comment">	#启用交叉编译环境</span></span><br><span class="line"><span class="comment">	--enable-cross-compile \</span></span><br><span class="line"><span class="comment">	--sysroot=$SYSROOT \</span></span><br><span class="line"><span class="comment">	#开启最小编译</span></span><br><span class="line"><span class="comment">	--enable-small \</span></span><br><span class="line"><span class="comment">	--extra-cflags="-Os -fpic $ADDI_CFLAGS" \</span></span><br><span class="line"><span class="comment">	--extra-ldflags="$ADDI_LDFLAGS" \</span></span><br><span class="line"><span class="comment">	$ADDITIONAL_CONFIGURE_FLAG</span></span><br><span class="line"><span class="comment">	make clean</span></span><br><span class="line"><span class="comment">	make</span></span><br><span class="line"><span class="comment">	make install</span></span><br><span class="line"><span class="comment">	echo "build ffmpeg for $ARCH finished"</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">#arm</span></span><br><span class="line"><span class="comment">ARCH=arm</span></span><br><span class="line"><span class="comment">CPU=arm</span></span><br><span class="line"><span class="comment">#输出路径为当前目录下的android下的架构 动态库及头文件会放到这里</span></span><br><span class="line"><span class="comment">PREFIX=$(pwd)/android/$ARCH</span></span><br><span class="line"><span class="comment">#配置编译工具</span></span><br><span class="line"><span class="comment">TOOLCHAIN=$NDK_HOME/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64</span></span><br><span class="line"><span class="comment">#交叉编译目录</span></span><br><span class="line"><span class="comment">CROSS_COMPILE=$TOOLCHAIN/bin/arm-linux-androideabi-</span></span><br><span class="line"><span class="comment">ADDI_CFLAGS="-marm"</span></span><br><span class="line"><span class="comment">#系统平台目录</span></span><br><span class="line"><span class="comment">SYSROOT=$NDK_HOME/platforms/$PLATFORM_VERSION/arch-$ARCH/</span></span><br><span class="line"><span class="comment">build</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">#x86</span></span><br><span class="line"><span class="comment">ARCH=x86</span></span><br><span class="line"><span class="comment">CPU=x86</span></span><br><span class="line"><span class="comment">PREFIX=$(pwd)/android/$ARCH</span></span><br><span class="line"><span class="comment">TOOLCHAIN=$NDK_HOME/toolchains/x86-4.9/prebuilt/linux-x86_64</span></span><br><span class="line"><span class="comment">CROSS_COMPILE=$TOOLCHAIN/bin/i686-linux-android-</span></span><br><span class="line"><span class="comment">ADDI_CFLAGS="-march=i686 -mtune=intel -mssse3 -mfpmath=sse -m32"</span></span><br><span class="line"><span class="comment">SYSROOT=$NDK_HOME/platforms/$PLATFORM_VERSION/arch-$ARCH/</span></span><br><span class="line"><span class="comment">build</span></span><br></pre></td></tr></table></figure>
+
+<p>（使用时要将上面中文注释都去掉，否则有坑哈~）</p>
+<p>执行android编译脚本：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">chmod <span class="number">777</span> build_android.sh</span><br><span class="line"></span><br><span class="line">./build_android.sh</span><br></pre></td></tr></table></figure>
+
+<p>其中可能遇到一些问题，解决方法可以参见下方说明。<br>编译中：</p>
+<img src="http://www.zydeveloper.com/2019/09/04/ffmpeg-build/2019-09-04-15-35-12.png">
+
+<p>大概编译10分钟左右，我是虚拟机编译可能比较慢，各位可以使用真机编译会快一点。<br>最终编译完成后如下：</p>
+<img src="http://www.zydeveloper.com/2019/09/04/ffmpeg-build/2019-09-04-16-04-46.png">
+
+<p>取出我们使用的文件：</p>
+<img src="http://www.zydeveloper.com/2019/09/04/ffmpeg-build/2019-09-04-16-03-45.png">
+
+<p>include头文件使用arm或者x86的都可以。</p>
+<img src="http://www.zydeveloper.com/2019/09/04/ffmpeg-build/2019-09-04-16-06-34.png">
+
+<img src="http://www.zydeveloper.com/2019/09/04/ffmpeg-build/2019-09-04-16-07-07.png">
+
+<p>如上就是ffmpeg的编译过程。</p>
+<p><strong>常见问题</strong></p>
+<p><strong>问题1：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc is unable to create an executable file.</span><br></pre></td></tr></table></figure>
+
+<p>解决方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install gcc</span><br></pre></td></tr></table></figure>
+
+<p><strong>问题2：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yasm/nasm not found or too old. Use --disable-yasm <span class="keyword">for</span> a crippled build.</span><br></pre></td></tr></table></figure>
+
+<p>原因：<br>yasm是汇编编译器，ffmpeg为了提高效率使用了汇编指令，如MMX和SSE等。所以系统中未安装yasm时，就会报上面错误。</p>
+<p>解决方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install yasm</span><br></pre></td></tr></table></figure>
+
+<p><strong>问题3：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mark command not found</span><br></pre></td></tr></table></figure>
+
+<p>解决方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install make</span><br></pre></td></tr></table></figure>
+
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        <li title='0' data-url='http://link.hhtjim.com/163/5146554.mp3'></li>
+                    
+                        <li title='1' data-url='http://link.hhtjim.com/qq/001faIUs4M2zna.mp3'></li>
+                    
+                </ul>
+            
+        </div>
+        
+    <div id='gitalk-container' class="comment link"
+        data-ae='false'
+        data-ci=''
+        data-cs=''
+        data-r=''
+        data-o=''
+        data-a=''
+        data-d='false'
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</html>
